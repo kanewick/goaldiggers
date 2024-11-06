@@ -121,7 +121,7 @@ const Players = () => {
           ListHeaderComponent={() => (
             <View className="flex-row justify-between items-center px-5 py-2 bg-gray-200 font-pregular">
               <Text className="flex-1 text-left font-bold">Name</Text>
-              <Text className="flex-1 text-left font-bold">Rating</Text>
+              <Text className="flex-1 text-left font-bold">Ratingss</Text>
               <Text className="flex-1 text-left font-bold">Rated By</Text>
               <Text className="flex-1 text-left font-bold">Timestamp</Text>
             </View>
