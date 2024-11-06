@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "goal-diggers-app",
+    "slug": "goal-diggers-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splashpage.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#161622"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "package": "com.kalco.goaldiggers"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#161622"
+      },
+      "package": "com.anonymous.goaldiggersapp"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
