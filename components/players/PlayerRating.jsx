@@ -1,9 +1,22 @@
+/* eslint-disable react/prop-types */
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "@react-native-community/slider";
 
-const PlayerRating = ({ otherStyles, title, setSelectedRating }) => {
-  const [rating, setRating] = useState(0);
+const PlayerRating = ({
+  otherStyles,
+  title,
+  setSelectedRating,
+  disabled,
+  defaultValue,
+}) => {
+  const [rating, setRating] = useState(defaultValue);
+
+  useEffect(() => {
+    if (defaultValue !== undefined) {
+      setRating(defaultValue);
+    }
+  }, [defaultValue]);
 
   const handleValueChange = (value) => {
     setRating(value);
@@ -24,8 +37,8 @@ const PlayerRating = ({ otherStyles, title, setSelectedRating }) => {
           onValueChange={handleValueChange}
           minimumTrackTintColor="#068305"
           maximumTrackTintColor="#dc2626"
-          dc2626
           thumbTintColor="#068305"
+          disabled={disabled}
         />
       </View>
     </View>

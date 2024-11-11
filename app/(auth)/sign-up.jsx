@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import FormField from "../../components/FormField";
+import FormField from "../../components/common/FormField";
 import images from "../../constants/images"; // Ensure this path is correct based on your folder structure
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../components/common/CustomButton";
 import { Link, router } from "expo-router";
 import { createAndSignInUser } from "../../lib/appwrite";
-import { useGlobalContext } from "@/context/GlobalProvider";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignUp = () => {
   const { setUser, setIsLoggedIn } = useGlobalContext();

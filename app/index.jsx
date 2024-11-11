@@ -1,17 +1,18 @@
+// app/index.jsx
 import { ScrollView, Text, View, Image, Animated } from "react-native";
 import { React, useRef, useEffect } from "react";
-import "../global.css";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/common/CustomButton"; // This should point to the correct path
 import { router, Link, Redirect } from "expo-router";
 import images from "../constants/images"; // Ensure this path is correct based on your folder structure
 import { StatusBar } from "expo-status-bar";
 import { useGlobalContext } from "../context/GlobalProvider";
+import "../global.css";
 
 export default function App() {
   const { isLoading, isLoggedIn } = useGlobalContext();
 
-  if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
+  if (!isLoading && isLoggedIn) return <Redirect href="/dashboard" />;
 
   const textFadeAnim = useRef(new Animated.Value(0)).current;
   const contentFadeAnim = useRef(new Animated.Value(0)).current;
@@ -40,17 +41,14 @@ export default function App() {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View
-          className="w-full
-        items-center h-[85vh] px-4"
-        >
+        <View className="w-full items-center h-[85vh] px-4">
           <Animated.View
             style={{ opacity: imageFadeAnim }}
             className="relative mt-5"
           >
             <Image
               source={images.splashpage}
-              className="max-w-[380px]  h-[300px] mt-0 pt-0"
+              className="max-w-[380px] h-[300px] mt-0 pt-0"
               resizeMode="contain"
             />
           </Animated.View>

@@ -33,13 +33,28 @@ const RootLayout = () => {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="players/add" options={{ headerShown: false }} />
         <Stack.Screen
-          name="players/edit/[id]"
+          name="(main)/(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(main)/players/add"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(main)/players/edit/[id]"
           options={{ headerShown: false }} // Hide header for the dynamic [id] screen
         />
-        <Stack.Screen name="ratings/add" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(main)/ratings/add"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(main)/ratings/edit/[id]"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </GlobalProvider>
   );

@@ -9,9 +9,9 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
-import Header from "../../../components/Header";
-import FormField from "../../../components/FormField";
-import CustomButton from "../../../components/CustomButton";
+import Header from "../../../../components/common/Header";
+import FormField from "../../../../components/common/FormField";
+import CustomButton from "../../../../components/common/CustomButton";
 import { useNavigation, useLocalSearchParams } from "expo-router";
 import { updateUser, getUser, getLoggedInId } from "@/lib/appwrite";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -125,11 +125,12 @@ const PlayerEdit = () => {
           subTitle="Edit"
           screenTitle={user?.name ?? "Player"}
           returnUrl="players"
-          returnText="Go back to Players"
+          returnText="Go back"
           navigation={navigation}
         />
         <View style={{ flex: 1 }}>
           <ScrollView
+            className="mb-10"
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 80 }}
           >
@@ -239,23 +240,15 @@ const PlayerEdit = () => {
             </View>
           </ScrollView>
 
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              padding: 10,
-            }}
-          >
+          <View className="absolute bottom-0 left-0 right-0 p-2 pt-4 bg-primary">
             <CustomButton
               title="Update"
               handlePress={submit}
-              containerStyles="mt-7"
+              containerStyles="mt-2"
               isLoading={isSubmitting}
             />
             {!editableField && (
-              <Text className="text-red-500 text-center mt-2">
+              <Text className="text-red-500 text-center mt-3">
                 You cannot update players.
               </Text>
             )}

@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import { useGlobalContext } from "../context/GlobalProvider";
-import images from "../constants/images"; // Ensure this path is correct based on your folder structure
+import { useGlobalContext } from "../../context/GlobalProvider";
+import images from "../../constants/images"; // Ensure this path is correct based on your folder structure
 
 const Header = ({
   subTitle,

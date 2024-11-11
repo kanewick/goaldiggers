@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   View,
   Text,
@@ -7,8 +8,7 @@ import {
   Switch,
 } from "react-native";
 import React, { useState } from "react";
-import icons from "../constants/icons"; // Ensure this path is correct based on your folder structure
-import { Picker } from "@react-native-picker/picker";
+import icons from "../../constants/icons"; // Ensure this path is correct based on your folder structure
 
 const FormField = ({
   title,

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text } from "react-native";
@@ -8,6 +9,7 @@ const PlayerSelect = ({
   otherStyles,
   selectedPlayer, // The currently selected player ID
   setSelectedPlayer, // Function to update the selected player
+  disabled,
 }) => {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
@@ -22,8 +24,6 @@ const PlayerSelect = ({
       setItems(formattedItems);
     }
   }, [players]);
-
-  const onchange = () => {};
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
@@ -56,6 +56,7 @@ const PlayerSelect = ({
           color: "#999", // Color of the placeholder
           fontStyle: "italic", // Optional: Make placeholder italic
         }}
+        disabled={disabled}
       />
     </View>
   );

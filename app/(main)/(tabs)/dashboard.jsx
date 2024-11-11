@@ -1,8 +1,8 @@
 import { SafeAreaView, ScrollView } from "react-native";
 import React from "react";
-import Header from "../../components/Header";
+import Header from "../../../components/common/Header";
 
-const Home = () => {
+const DashboardScreen = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default DashboardScreen;

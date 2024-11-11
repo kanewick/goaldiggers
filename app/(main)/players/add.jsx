@@ -1,19 +1,17 @@
 import {
   SafeAreaView,
   View,
-  Text,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from "react-native";
-import Header from "../../components/Header";
-import FormField from "../../components/FormField";
-import CustomButton from "../../components/CustomButton";
+import Header from "../../../components/common/Header";
+import FormField from "../../../components/common/FormField";
+import CustomButton from "../../../components/common/CustomButton";
 import React, { useState } from "react";
-import { Link, router } from "expo-router";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
-import { createUser } from "../../lib/appwrite";
+import { createUser } from "../../../lib/appwrite";
 
 const Add = () => {
   const navigation = useNavigation();

@@ -1,14 +1,12 @@
-import { View, Text, Image } from "react-native";
+/* eslint-disable react/prop-types */
 import React from "react";
-import { Tabs, Redirect } from "expo-router";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
-
-import icons from "../../constants/icons";
+import { Image, Text, View } from "react-native";
+import { Tabs } from "expo-router";
+import icons from "../../../constants/icons";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-2 pt-2 mt-2">
+    <View className="flex items-center justify-center gap-2">
       <Image
         source={icon}
         resizeMode="contain"
@@ -16,8 +14,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
         className="w-6 h-6"
       />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} 
-          text-xs`}
+        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
         style={{ color: color }}
       >
         {name}
@@ -43,7 +40,7 @@ const TabsLayout = () => {
         }}
       >
         <Tabs.Screen
-          name="home"
+          name="dashboard"
           options={{
             title: "Dashboard",
             headerShown: false,
@@ -52,7 +49,7 @@ const TabsLayout = () => {
                 icon={icons.home} // Use icons.home directly
                 color={color}
                 focused={focused}
-                name="Dashboard"
+                name="dashboard"
               />
             ),
           }}
@@ -68,14 +65,14 @@ const TabsLayout = () => {
                   icon={icons.bookmark} // Use icons.home directly
                   color={color}
                   focused={focused}
-                  name="Squad"
+                  name="Team"
                 />
               </>
             ),
           }}
         />
         <Tabs.Screen
-          name="create"
+          name="fixtures"
           options={{
             title: "Fixtures",
             headerShown: false,
@@ -84,7 +81,7 @@ const TabsLayout = () => {
                 icon={icons.plus} // Use icons.home directly
                 color={color}
                 focused={focused}
-                name="Fixtures"
+                name="plus"
               />
             ),
           }}
@@ -99,7 +96,7 @@ const TabsLayout = () => {
                 icon={icons.profile} // Use icons.home directly
                 color={color}
                 focused={focused}
-                name="Profile"
+                name="profile"
               />
             ),
           }}
