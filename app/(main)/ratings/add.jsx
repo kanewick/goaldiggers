@@ -6,18 +6,14 @@ import {
   Platform,
   Text,
 } from "react-native";
-import {
-  getAllUsers,
-  getLoggedInId,
-  createRating,
-  getAllRatings,
-} from "../../../lib/appwrite";
 import Header from "../../../components/common/Header";
 import CustomButton from "../../../components/common/CustomButton";
 import { useNavigation } from "@react-navigation/native";
 import PlayerSelect from "../../../components/players/PlayerSelect"; // Adjust this import if necessary
-import PlayerRating from "../../../components/players/PlayerRating";
+import RatingSlider from "../../../components/ratings/RatingSlider";
 import Loading from "../../../components/common/Loading";
+
+import ratingService from "../../../services/ratingsService";
 
 const AddRating = () => {
   const [disabled, setDisabled] = useState(false);
@@ -25,7 +21,6 @@ const AddRating = () => {
   const [loading, setLoading] = useState(true);
   const [filteredPlayers, setFilteredPlayers] = useState([]);
 
-  const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -43,19 +38,10 @@ const AddRating = () => {
     async function fetchData() {
       setLoading(true);
 
-      const loggedInId = await getLoggedInId();
-      setLoggedInUserId(loggedInId);
+      const filteredPlayersWithRating =
+        await ratingService.filterPlayersWithRating();
 
-      const fetchedPlayers = await getAllUsers();
-      const ratingData = await getAllRatings();
-
-      const filtered = await filterPlayersWithRating(
-        fetchedPlayers,
-        ratingData.documents || [],
-        loggedInId
-      );
-
-      if (filtered.length === 0) {
+      if (filteredPlayersWithRating.length === 0) {
         setEmptyUsersMessage(
           "You have assigned ratings to all players in Goal Diggers. If you want to amend your ratings, go to the ratings and edit the player you wish to update."
         );
@@ -63,7 +49,7 @@ const AddRating = () => {
         setDisabled(true);
       }
 
-      setFilteredPlayers(filtered); // Store the filtered players
+      setFilteredPlayers(filteredPlayersWithRating); // Store the filtered players
       setLoading(false);
     }
 
@@ -72,8 +58,7 @@ const AddRating = () => {
 
   const submit = async () => {
     setIsSubmitting(true);
-    const rating = await createRating(
-      loggedInUserId,
+    const rating = await ratingService.createRating(
       selectedRating,
       selectedPlayer
     );
@@ -82,30 +67,6 @@ const AddRating = () => {
       setIsSubmitting(false);
       navigation.navigate("players");
     }
-  };
-
-  const filterPlayersWithRating = async (players, ratings, loggedInId) => {
-    // get all loggedin user ratings
-    const loggedInUsersRatings = ratings.filter((rating) => {
-      return rating.ratedByPlayerId === loggedInId;
-    });
-
-    // now grab all the playerIds
-    const ratedPlayerIds = loggedInUsersRatings.map(
-      (rating) => rating.ratedPlayerId
-    );
-
-    // filter out only get players who not rating assigned
-    const filteredPlayers = players.filter((player) => {
-      return !ratedPlayerIds.includes(player.$id);
-    });
-
-    // now need to exclude ourselves
-    const filteredPlayersWithoutUs = filteredPlayers.filter((player) => {
-      return player.accountId !== loggedInId;
-    });
-
-    return filteredPlayersWithoutUs;
   };
 
   if (loading) {
@@ -148,7 +109,7 @@ const AddRating = () => {
               disabled={disabled}
             />
           </View>
-          <PlayerRating
+          <RatingSlider
             title={"Select Rating"}
             otherStyles={"mt-7"}
             setSelectedRating={(e) => {

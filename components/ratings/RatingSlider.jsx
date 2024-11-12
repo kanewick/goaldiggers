@@ -3,14 +3,14 @@ import { View, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import Slider from "@react-native-community/slider";
 
-const PlayerRating = ({
+const RatingSlider = ({
   otherStyles,
   title,
   setSelectedRating,
   disabled,
   defaultValue,
 }) => {
-  const [rating, setRating] = useState(defaultValue);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     if (defaultValue !== undefined) {
@@ -45,4 +45,4 @@ const PlayerRating = ({
   );
 };
 
-export default PlayerRating;
+export default RatingSlider;

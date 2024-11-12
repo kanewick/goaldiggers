@@ -4,9 +4,9 @@ import React from "react";
 import Error from "../common/Error";
 import { Link } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
+import ratingService from "../../services/ratingsService";
 
-const PlayerRatingCard = ({ rating, users }) => {
-  console.log("Player Rating", rating);
+const RatingRow = ({ rating, users }) => {
   if (!rating) {
     return <Error message="Rating data is missing." />;
   }
@@ -19,8 +19,10 @@ const PlayerRatingCard = ({ rating, users }) => {
   const { ratedPlayerId, averageRating } = rating;
 
   // Find the rated player based on `ratedPlayerId`
-  const ratedPlayer =
-    users.find((player) => player.$id === ratedPlayerId) || null;
+  const ratedPlayer = ratingService.getPlayerFromRatedPlayerId(
+    users,
+    ratedPlayerId
+  );
 
   // Early return if the rated player is not found
   if (!ratedPlayer) {
@@ -54,4 +56,4 @@ const PlayerRatingCard = ({ rating, users }) => {
   );
 };
 
-export default PlayerRatingCard;
+export default RatingRow;

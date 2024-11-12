@@ -9,14 +9,11 @@ import {
 import Header from "../../../../components/common/Header";
 import { useNavigation, useLocalSearchParams } from "expo-router";
 import CustomButton from "../../../../components/common/CustomButton";
-import {
-  getAllRatingsForLoggedInUser,
-  getUser,
-  updateRating,
-} from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
-import PlayerRating from "../../../../components/players/PlayerRating";
+import RatingSlider from "../../../../components/ratings/RatingSlider";
 import Loading from "../../../../components/common/Loading";
+import ratingService from "../../../../services/ratingsService";
+import playerService from "../../../../services/playerService";
 
 const RatingEdit = () => {
   // Declare
@@ -24,44 +21,26 @@ const RatingEdit = () => {
   const { id } = useLocalSearchParams();
 
   // Set state
-  const [disabled, setDisabled] = useState(false);
-  const [ratedPlayerIdParam, setRatedPlayerIdParam] = useState(id);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [playerRatings, setPlayerRatings] = useState([]);
-  const [ratedPlayer, setRatedPlayer] = useState(null);
-  const [ratedPlayerDoc, setRatedPlayerDoc] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
-  const [form, setForm] = useState({
-    ratedByPlayerId: "",
-    rating: 0, // or whatever initial value you want
-    ratedPlayerId: "",
-    timestamp: null,
-  });
+  const [ratedPlayer, setRatedPlayer] = useState(null);
+  const [ratingObj, setRatingObj] = useState(null);
 
   // Get all Ratings
-  const { data, loading, refreshing, onRefresh } = useAppwrite(
-    getAllRatingsForLoggedInUser
+  const { data: userRatings, loading } = useAppwrite(
+    ratingService.getAllRatingsForLoggedInUser
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!data || data.length === 0) {
-          console.log("No data");
+        if (!userRatings || userRatings.length === 0) {
+          console.warn("No data");
           return;
         }
 
-        setPlayerRatings(data);
-        setRatedPlayerDoc(data[0]);
-
-        const fetchedPlayer = await getUser(ratedPlayerIdParam);
-        setRatedPlayer(fetchedPlayer);
-
-        console.log("Data loaded successfully", {
-          PlayerRatings: data,
-          ratedPlayerDoc: data[0],
-          ratedPlayer: fetchedPlayer,
-        });
+        setRatedPlayer(await playerService.getUser(id));
+        setRatingObj(ratingService.getRatingByUserId(userRatings, id));
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -70,21 +49,23 @@ const RatingEdit = () => {
     if (!loading) {
       fetchData();
     }
-  }, [loading, data]);
+  }, [loading, userRatings, id]);
 
   useEffect(() => {
-    if (ratedPlayerDoc && ratedPlayerDoc.rating !== undefined) {
-      console.log("ratedPlayerDoc", ratedPlayerDoc);
-      setSelectedRating(ratedPlayerDoc.rating);
+    if (ratingObj?.rating !== undefined) {
+      setSelectedRating(ratingObj.rating);
     }
-  }, [ratedPlayerDoc]);
+  }, [ratingObj]);
 
   const submit = async () => {
     setIsSubmitting(true);
-    const rating = await updateRating(ratedPlayerDoc.$id, selectedRating);
+    const rating = await ratingService.updateRating(
+      ratingObj.$id,
+      selectedRating
+    );
+    setIsSubmitting(false);
 
     if (rating) {
-      setIsSubmitting(false);
       navigation.navigate("players");
     }
   };
@@ -108,19 +89,16 @@ const RatingEdit = () => {
         />
         <View className="flex-row justify-center">
           <Text className="color-gray-100 text-center px-10 py-5">
-            Update your rating for {ratedPlayer?.name} {`\n`} (this will effect
+            Update your rating for {ratedPlayer?.name} {`\n`} (this will affect
             the overall average)
           </Text>
         </View>
-        <View className="w-full justify-center px-4 mb-6 ">
-          <PlayerRating
-            title={"Select Rating"}
-            otherStyles={"mt-7"}
-            setSelectedRating={(e) => {
-              setForm({ ...form, rating: e });
-              setSelectedRating(e);
-            }}
-            disabled={disabled}
+        <View className="w-full justify-center px-4 mb-6">
+          <RatingSlider
+            title="Select Rating"
+            otherStyles="mt-7"
+            setSelectedRating={(rating) => setSelectedRating(rating)}
+            disabled={false}
             defaultValue={selectedRating}
           />
           <CustomButton

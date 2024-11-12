@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { VirtualizedList, View, Text, RefreshControl } from "react-native";
-import PlayerRatingCard from "./PlayerRatingCard";
+import RatingRow from "./RatingRow";
 import CustomButton from "../common/CustomButton";
 import { router } from "expo-router";
 import Loading from "../common/Loading";
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllRatings, getAllUsers } from "../../lib/appwrite";
 import { getItem, getItemCount } from "../../utils/virtualisedListHelper";
+import ratingService from "../../services/ratingsService";
+import playerService from "../../services/playerService";
 
 const RatingsTable = () => {
   const [averages, setAverages] = useState([]);
@@ -17,32 +18,17 @@ const RatingsTable = () => {
     loading,
     refreshing,
     onRefresh,
-  } = useAppwrite(getAllRatings);
-  const { data: userData, loading: usersLoading } = useAppwrite(getAllUsers);
+  } = useAppwrite(ratingService.getAllRatings);
+
+  const { data: userData, loading: usersLoading } = useAppwrite(
+    playerService.getAllUsers
+  );
 
   useEffect(() => {
     if (ratingsData && ratingsData.documents) {
-      const ratingMap = {};
-
-      ratingsData.documents.forEach((rating) => {
-        const { ratedPlayerId, rating: ratingScore } = rating;
-
-        if (!ratingMap[ratedPlayerId]) {
-          ratingMap[ratedPlayerId] = { totalScore: 0, count: 0 };
-        }
-
-        ratingMap[ratedPlayerId].totalScore += ratingScore;
-        ratingMap[ratedPlayerId].count += 1;
-      });
-
-      const averagesArray = Object.entries(ratingMap).map(
-        ([ratedPlayerId, { totalScore, count }]) => ({
-          ratedPlayerId,
-          averageRating: totalScore / count,
-        })
+      setAverages(
+        ratingService.calculateMappedPlayerRatingsAverages(ratingsData)
       );
-
-      setAverages(averagesArray);
     }
   }, [ratingsData]);
 
@@ -62,9 +48,7 @@ const RatingsTable = () => {
       keyExtractor={(item) => item.ratedPlayerId}
       getItem={getItem}
       getItemCount={getItemCount}
-      renderItem={({ item }) => (
-        <PlayerRatingCard rating={item} users={users} />
-      )}
+      renderItem={({ item }) => <RatingRow rating={item} users={users} />}
       ListHeaderComponent={() => (
         <>
           <View className="flex-row justify-between items-center px-5 py-2 bg-gray-200 font-pregular">

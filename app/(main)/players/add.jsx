@@ -11,7 +11,7 @@ import FormField from "../../../components/common/FormField";
 import CustomButton from "../../../components/common/CustomButton";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
-import { createUser } from "../../../lib/appwrite";
+import playerService from "../../../services/playerService";
 
 const Add = () => {
   const navigation = useNavigation();
@@ -33,15 +33,7 @@ const Add = () => {
     setIsSubmitting(true);
 
     try {
-      console.log("Approved " + form.approved);
-      await createUser(
-        form.email,
-        form.password,
-        form.username,
-        form.name,
-        form.position,
-        form.approved ?? false
-      );
+      await playerService.createUser(form);
 
       navigation.navigate("players");
     } catch (error) {

@@ -6,7 +6,7 @@ import {
   RefreshControl,
 } from "react-native";
 import React from "react";
-import PlayerCard from "../players/PlayerCard";
+import PlayerTableRow from "./PlayerTableRow";
 import CustomButton from "../common/CustomButton";
 import Loading from "../common/Loading";
 import { router } from "expo-router";
@@ -33,7 +33,7 @@ const PlayersTable = () => {
         keyExtractor={(player) => player.$id}
         getItem={getItem}
         getItemCount={getItemCount}
-        renderItem={({ item: player }) => <PlayerCard player={player} />}
+        renderItem={({ item: player }) => <PlayerTableRow player={player} />}
         ListHeaderComponent={() => (
           <View className="flex-row justify-between items-center px-4 py-2 bg-gray-200 border-t-0 font-pregular">
             <Text className="text-left font-bold" style={{ width: 150 }}>

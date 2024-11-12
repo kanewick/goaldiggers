@@ -17,11 +17,12 @@ const PlayerSelect = ({
   // Update items whenever players prop changes
   useEffect(() => {
     if (players) {
-      const formattedItems = players.map((player) => ({
-        label: player.name,
-        value: player.$id,
-      }));
-      setItems(formattedItems);
+      setItems(
+        players.map((player) => ({
+          label: player.name,
+          value: player.$id,
+        }))
+      );
     }
   }, [players]);
 

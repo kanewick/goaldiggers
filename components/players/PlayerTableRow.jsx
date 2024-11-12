@@ -4,7 +4,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Link } from "expo-router";
 import React from "react";
 
-const PlayerCard = ({ player }) => {
+const PlayerTableRow = ({ player }) => {
   return (
     <View className="flex-row justify-between items-center px-4 py-4 border-t border-gray-300">
       <Text
@@ -40,4 +40,4 @@ const PlayerCard = ({ player }) => {
   );
 };
 
-export default PlayerCard;
+export default PlayerTableRow;
