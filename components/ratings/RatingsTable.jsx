@@ -72,7 +72,7 @@ const RatingsTable = () => {
         <View className="mt-7 px-3">
           <CustomButton
             title="New Rating"
-            handlePress={() => router.push("/ratings/add")}
+            handlePress={() => router.push("/ratings/add/index")}
             containerStyles="w-1/2-10 mb-5 min-h-[42px] px-3"
           />
         </View>

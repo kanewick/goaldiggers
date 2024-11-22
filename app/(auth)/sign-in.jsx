@@ -30,7 +30,7 @@ const SignIn = () => {
       setIsLoggedIn(true);
 
       Alert.alert("Success", "Logged in Success");
-      router.replace("/home");
+      router.replace("/dashboard");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

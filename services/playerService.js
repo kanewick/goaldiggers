@@ -1,9 +1,10 @@
 import * as appwrite from "../lib/appwrite";
+import { User } from "../models/User";
 
 const playerService = {
   /**
    * Asynchronously fetches all user data.
-   * @returns {Promise<Array<Object>>} A promise that resolves to an array of user objects.
+   * @returns {Promise<User[]>} A promise that resolves to an array of user objects.
    */
   async getAllUsers() {
     return await appwrite.getAllUsers();

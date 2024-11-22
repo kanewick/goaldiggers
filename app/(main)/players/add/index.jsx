@@ -6,14 +6,14 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import Header from "../../../components/common/Header";
-import FormField from "../../../components/common/FormField";
-import CustomButton from "../../../components/common/CustomButton";
+import Header from "../../../../components/common/Header";
+import FormField from "../../../../components/common/FormField";
+import CustomButton from "../../../../components/common/CustomButton";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation
-import playerService from "../../../services/playerService";
+import playerService from "../../../../services/playerService";
 
-const Add = () => {
+const AddPlayer = () => {
   const navigation = useNavigation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,8 +34,7 @@ const Add = () => {
 
     try {
       await playerService.createUser(form);
-
-      navigation.navigate("players");
+      navigation.goBack();
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -52,7 +51,7 @@ const Add = () => {
         <Header
           subTitle="Add New"
           screenTitle="Player"
-          returnUrl="players"
+          returnUrl="index"
           returnText="Go back to Players"
           navigation={navigation}
           st
@@ -116,4 +115,4 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default AddPlayer;

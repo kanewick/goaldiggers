@@ -85,7 +85,7 @@ const PlayerEdit = () => {
     setIsSubmitting(true);
     try {
       await updateUser(user.$id, user.accountId, form, statForm);
-      navigation.navigate("players");
+      navigation.goBack();
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -124,7 +124,7 @@ const PlayerEdit = () => {
         <Header
           subTitle="Edit"
           screenTitle={user?.name ?? "Player"}
-          returnUrl="players"
+          returnUrl="index"
           returnText="Go back"
           navigation={navigation}
         />

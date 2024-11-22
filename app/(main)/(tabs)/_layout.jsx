@@ -49,7 +49,7 @@ const TabsLayout = () => {
                 icon={icons.home} // Use icons.home directly
                 color={color}
                 focused={focused}
-                name="dashboard"
+                name="Home"
               />
             ),
           }}
@@ -57,7 +57,7 @@ const TabsLayout = () => {
         <Tabs.Screen
           name="players"
           options={{
-            title: "Squad",
+            title: "Players",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <>
@@ -65,7 +65,7 @@ const TabsLayout = () => {
                   icon={icons.bookmark} // Use icons.home directly
                   color={color}
                   focused={focused}
-                  name="Team"
+                  name="Players"
                 />
               </>
             ),

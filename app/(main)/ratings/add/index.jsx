@@ -6,16 +6,16 @@ import {
   Platform,
   Text,
 } from "react-native";
-import Header from "../../../components/common/Header";
-import CustomButton from "../../../components/common/CustomButton";
+import Header from "../../../../components/common/Header";
+import CustomButton from "../../../../components/common/CustomButton";
 import { useNavigation } from "@react-navigation/native";
-import PlayerSelect from "../../../components/players/PlayerSelect"; // Adjust this import if necessary
-import RatingSlider from "../../../components/ratings/RatingSlider";
-import Loading from "../../../components/common/Loading";
+import PlayerSelect from "../../../../components/players/PlayerSelect"; // Adjust this import if necessary
+import RatingSlider from "../../../../components/ratings/RatingSlider";
+import Loading from "../../../../components/common/Loading";
+import ratingService from "../../../../services/ratingsService";
+import playerService from "../../../../services/playerService";
 
-import ratingService from "../../../services/ratingsService";
-
-const AddRating = () => {
+const AddRating = ({ id }) => {
   const [disabled, setDisabled] = useState(false);
   const [emptyUsersMessage, setEmptyUsersMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -48,6 +48,8 @@ const AddRating = () => {
 
         setDisabled(true);
       }
+
+      setSelectedPlayer(id);
 
       setFilteredPlayers(filteredPlayersWithRating); // Store the filtered players
       setLoading(false);

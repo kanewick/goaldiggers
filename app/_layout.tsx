@@ -30,7 +30,11 @@ const RootLayout = () => {
 
   return (
     <GlobalProvider>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerShown: false, // This will hide the header for all screens
+        }}
+      >
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen
@@ -38,22 +42,6 @@ const RootLayout = () => {
           options={{
             headerShown: false,
           }}
-        />
-        <Stack.Screen
-          name="(main)/players/add"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(main)/players/edit/[id]"
-          options={{ headerShown: false }} // Hide header for the dynamic [id] screen
-        />
-        <Stack.Screen
-          name="(main)/ratings/add"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="(main)/ratings/edit/[id]"
-          options={{ headerShown: false }}
         />
       </Stack>
     </GlobalProvider>

@@ -1,10 +1,11 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "name": "goal-diggers-app",
     "slug": "goal-diggers-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "myapp",
+    "scheme": "goal-diggers-app",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splashpage.png",

@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import * as appwrite from "../lib/appwrite";
 import playerService from "./playerService";
 
@@ -11,18 +12,10 @@ const ratingService = {
     const ratingMap = {};
 
     if (!ratingsData) {
-      console.warn(
-        "RatingService._mapPlayerRatings.ratingsData is undefined",
-        ratingsData
-      );
       return [];
     }
 
     if (!ratingsData.documents) {
-      console.warn(
-        "RatingService._mapPlayerRatings.ratingsData.documents is undefined",
-        ratingsData.documents
-      );
       return [];
     }
 
@@ -46,27 +39,28 @@ const ratingService = {
    * @returns {Array<Object>} An array of objects containing the rated player's ID and their average rating.
    */
   calculateMappedPlayerRatingsAverages(ratingsData) {
-    console.log("ratingsData", ratingsData);
+    if (!ratingsData) {
+      return [];
+    }
     const ratingMap = this._mapPlayerRatings(ratingsData);
-
     if (!ratingMap) {
-      console.warn(
-        "RatingService.calculateMappedPlayerRatingsAverages.ratingMap is not defined!",
-        ratingMap
-      );
-      return {};
+      return [];
     }
 
-    const mappedTotalAverages = Object.entries(ratingMap).map(
+    return this.calculateRatingAverages(ratingMap);
+  },
+
+  calculateRatingAverages(ratingMap) {
+    if (!ratingMap) {
+      return [];
+    }
+
+    return Object.entries(ratingMap).map(
       ([ratedPlayerId, { totalScore, count }]) => ({
         ratedPlayerId,
         averageRating: totalScore / count,
       })
     );
-
-    console.log("mappedTotalAverages", mappedTotalAverages);
-
-    return mappedTotalAverages;
   },
 
   /**
@@ -75,7 +69,7 @@ const ratingService = {
    * @param {String} ratedPlayerId - The ID of the rated player.
    * @returns {Object|null} The player object if found, otherwise null.
    */
-  getPlayerFromRatedPlayerId(users, ratedPlayerId) {
+  getUserByRatedPlayerId(users, ratedPlayerId) {
     return users.find((player) => player.$id === ratedPlayerId) || null;
   },
 
@@ -86,45 +80,85 @@ const ratingService = {
    * @returns {Object|undefined} The rating object for the specified user, or undefined if no rating is found.
    */
   getRatingByUserId(ratings, id) {
+    if (!ratings) {
+      return 0;
+    }
+
+    if (!id) {
+      return 0;
+    }
     return ratings.find((doc) => doc.ratedPlayerId === id);
   },
 
-  // ASYNC FUNCTIONS
-
-  /**
-   * Finds players who have not been rated yet by the logged-in user.
-   * @returns {Array<Object>} A filtered array of players who do not have ratings assigned.
-   */
-  async filterPlayersWithRating() {
-    const loggedInId = await playerService.getLoggedInId();
-    const users = await playerService.getAllUsers();
-    const ratings = await this.getAllRatings();
-
-    // Get all ratings made by the logged-in user
-    const loggedInUsersRatings = ratings.filter((rating) => {
-      return rating.ratedByPlayerId === loggedInId;
-    });
-
-    // Extract the rated player IDs
-    const ratedPlayerIds = loggedInUsersRatings.map(
-      (rating) => rating.ratedPlayerId
-    );
-
-    // Filter out players who have already been rated
-    const filteredPlayers = users.filter((player) => {
-      return !ratedPlayerIds.includes(player.$id);
-    });
-
-    // Exclude the logged-in user from the list
-    const filteredPlayersWithoutUs = filteredPlayers.filter((player) => {
-      return player.accountId !== loggedInId;
-    });
-
-    return filteredPlayersWithoutUs;
+  // Helper function to filter ratings by logged-in user
+  getLoggedInUsersRatings(ratings, loggedInId) {
+    return ratings.filter((rating) => rating.ratedByPlayerId === loggedInId);
   },
 
+  // Helper function to extract rated player IDs
+  getRatedPlayerIds(loggedInUsersRatings) {
+    return loggedInUsersRatings.map((rating) => rating.ratedPlayerId);
+  },
+
+  // Helper function to filter out rated players and logged-in user
+  filterPlayers(users, ratedPlayerIds, loggedInId) {
+    return users
+      .filter((player) => !ratedPlayerIds.includes(player.$id))
+      .filter((player) => player.accountId !== loggedInId);
+  },
+
+  // ASYNC FUNCTIONS
+  async filterPlayersWithRating() {
+    try {
+      const loggedInId = await this.getLoggedInId();
+      const users = await this.getUsers();
+      const ratings = await this.getAllRatings();
+      // Early returns for missing values
+      if (
+        !loggedInId ||
+        !users ||
+        !Array.isArray(users) ||
+        !ratings ||
+        !ratings.documents ||
+        ratings.documents.length === 0
+      ) {
+        return [];
+      }
+
+      const loggedInUsersRatings = this.getLoggedInUsersRatings(
+        ratings.documents,
+        loggedInId
+      );
+
+      const ratedPlayerIds = this.getRatedPlayerIds(loggedInUsersRatings);
+
+      // Filter players based on ratings and exclude the logged-in user
+      const filteredPlayers = this.filterPlayers(
+        users,
+        ratedPlayerIds,
+        loggedInId
+      );
+
+      return filteredPlayers;
+    } catch (error) {
+      console.error("Error in filterPlayersWithRating:", error);
+      throw new Error("Failed to filter players with ratings.");
+    }
+  },
+
+  async getLoggedInId() {
+    const loggedInId = await playerService.getLoggedInId();
+    return loggedInId;
+  },
+
+  async getUsers() {
+    const users = await playerService.getAllUsers();
+    return users;
+  },
+
+  // Helper function to get ratings
   /**
-   * Retrieves all ratings.
+   * ASYNC Retrieves all ratings.
    * @returns {Promise<Object>} A promise that resolves to the object containing all ratings.
    */
   async getAllRatings() {
@@ -132,12 +166,15 @@ const ratingService = {
   },
 
   /**
-   * Creates a new rating for a player.
+   * ASYNC Creates a new rating for a player.
    * @param {Number} rating - The rating score.
    * @param {String} ratedPlayerId - The ID of the player being rated.
    * @returns {Promise<Object>} A promise that resolves to the created rating document.
    */
   async createRating(rating, ratedPlayerId) {
+    if (!rating) throw new Error("Rating is undefined, cannot update.");
+    if (!ratedPlayerId)
+      throw new Error("ratedPlayerId is undefined, cannot update.");
     return await appwrite.createRating(
       await playerService.getLoggedInId(),
       rating,
@@ -146,7 +183,7 @@ const ratingService = {
   },
 
   /**
-   * Asynchronously fetches all ratings for the logged-in user.
+   * ASYNC fetches all ratings for the logged-in user.
    * @returns {Promise<Array<Object>>} A promise that resolves to an array of rating objects for the logged-in user.
    */
   async getAllRatingsForLoggedInUser() {
@@ -160,6 +197,8 @@ const ratingService = {
    * @returns {Object} Returns the updated rating data.
    */
   async updateRating(id, rating) {
+    if (!rating) throw new Error("Rating is undefined, cannot update.");
+    if (!id) throw new Error("id is undefined, cannot update.");
     return await appwrite.updateRating(id, rating);
   },
 };

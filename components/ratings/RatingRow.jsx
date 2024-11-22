@@ -1,15 +1,38 @@
 /* eslint-disable react/prop-types */
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Error from "../common/Error";
 import { Link } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons";
 import ratingService from "../../services/ratingsService";
+import Feather from "@expo/vector-icons/Feather";
 
 const RatingRow = ({ rating, users }) => {
-  if (!rating) {
-    return <Error message="Rating data is missing." />;
-  }
+  const [showEdit, setShowEdit] = useState(true);
+
+  useEffect(() => {
+    const fetchFilteredPlayers = async () => {
+      try {
+        const players = await ratingService.filterPlayersWithRating();
+
+        // Find the player with the matching $id
+        const ratedPlayer = players.find(
+          (player) => player.$id === rating.ratedPlayerId
+        );
+
+        // If a matching player is found, set showEdit to false
+        if (ratedPlayer) {
+          setShowEdit(false);
+        }
+      } catch (error) {
+        console.error("Error fetching filtered players", error);
+      }
+    };
+
+    if (rating && users) {
+      fetchFilteredPlayers();
+    }
+  }, [rating, users]);
 
   // Early return if users array is empty or undefined
   if (!users || users.length === 0) {
@@ -17,19 +40,11 @@ const RatingRow = ({ rating, users }) => {
   }
 
   const { ratedPlayerId, averageRating } = rating;
-
   // Find the rated player based on `ratedPlayerId`
-  const ratedPlayer = ratingService.getPlayerFromRatedPlayerId(
+  const ratedPlayer = ratingService.getUserByRatedPlayerId(
     users,
     ratedPlayerId
   );
-
-  // Early return if the rated player is not found
-  if (!ratedPlayer) {
-    return (
-      <Error message="Could not find the player associated with this rating." />
-    );
-  }
 
   return (
     <View className="flex-row justify-between items-center px-4 py-4 border-t border-gray-300">
@@ -42,15 +57,26 @@ const RatingRow = ({ rating, users }) => {
       <Link
         className="flex-1"
         href={{
-          pathname: `ratings/edit/${rating.ratedPlayerId}`,
+          pathname: showEdit
+            ? `ratings/edit/${rating.ratedPlayerId}` // Use edit path if showEdit is true
+            : `ratings/add/${rating.ratedPlayerId}`, // Use view path if showEdit is false
         }}
       >
-        <FontAwesome6
-          name="edit"
-          size={20}
-          color="white"
-          className="text-right"
-        />
+        {showEdit ? (
+          <FontAwesome6
+            name="edit"
+            size={20}
+            color="white"
+            className="text-right"
+          />
+        ) : (
+          <Feather
+            size={20}
+            color="white"
+            className="text-right"
+            name="plus-square"
+          />
+        )}
       </Link>
     </View>
   );

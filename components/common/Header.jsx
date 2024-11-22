@@ -12,7 +12,6 @@ const Header = ({
   navigation,
 }) => {
   const { user } = useGlobalContext();
-
   return (
     <View className="px-5 flex-row justify-between">
       <View className="mt-5">
@@ -31,7 +30,7 @@ const Header = ({
 
         {/* Check if returnUrl is defined */}
         {returnUrl && (
-          <TouchableOpacity onPress={() => navigation.navigate(returnUrl)}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text className="text-secondary-100 underline my-4">
               {returnText}
             </Text>
