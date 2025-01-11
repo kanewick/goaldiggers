@@ -4,13 +4,7 @@ import React from "react";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import images from "../../constants/images"; // Ensure this path is correct based on your folder structure
 
-const Header = ({
-  subTitle,
-  screenTitle,
-  returnUrl,
-  returnText,
-  navigation,
-}) => {
+const Header = ({ subTitle, screenTitle, returnUrl, navigation }) => {
   const { user } = useGlobalContext();
   return (
     <View className="px-5 flex-row justify-between">
@@ -31,9 +25,7 @@ const Header = ({
         {/* Check if returnUrl is defined */}
         {returnUrl && (
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-secondary-100 underline my-4">
-              {returnText}
-            </Text>
+            <Text className="text-secondary-100 underline my-4">Go Back</Text>
           </TouchableOpacity>
         )}
       </View>

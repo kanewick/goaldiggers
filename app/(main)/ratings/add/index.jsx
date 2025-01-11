@@ -85,7 +85,6 @@ const AddRating = ({ id }) => {
           subTitle="Add New"
           screenTitle="Rating"
           returnUrl="players"
-          returnText="Go back"
           navigation={navigation}
         />
         <View className="flex-row justify-center">

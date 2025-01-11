@@ -125,7 +125,6 @@ const PlayerEdit = () => {
           subTitle="Edit"
           screenTitle={user?.name ?? "Player"}
           returnUrl="index"
-          returnText="Go back"
           navigation={navigation}
         />
         <View style={{ flex: 1 }}>

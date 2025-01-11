@@ -52,7 +52,6 @@ const AddPlayer = () => {
           subTitle="Add New"
           screenTitle="Player"
           returnUrl="index"
-          returnText="Go back to Players"
           navigation={navigation}
           st
         />

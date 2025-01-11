@@ -22,9 +22,15 @@ const PlayersTable = () => {
     onRefresh,
   } = useAppwrite(getAllUsers);
 
+  console.log("Loading players table");
   if (loading) {
     return <Loading />;
   }
+
+  console.log("Players table loaded");
+
+  console.log("Loading:", loading);
+  console.log("Users:", users);
 
   return (
     <SafeAreaView className="bg-primary flex-1">

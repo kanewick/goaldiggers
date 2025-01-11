@@ -46,7 +46,7 @@ const SignUp = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      router.replace("/home");
+      router.replace("/(main)/(tabs)/players");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {

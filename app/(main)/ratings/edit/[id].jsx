@@ -84,7 +84,6 @@ const RatingEdit = () => {
           subTitle="Edit"
           screenTitle="Rating"
           returnUrl="players"
-          returnText="Go back"
           navigation={navigation}
         />
         <View className="flex-row justify-center">

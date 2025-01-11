@@ -2,14 +2,14 @@ import { SafeAreaView, ScrollView } from "react-native";
 import React from "react";
 import Header from "../../../components/common/Header";
 
-const FixturesScreen = () => {
+const StatsScreen = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Header screenTitle={"Fixtures"} subTitle={"Manage"} />
+        <Header screenTitle={"Stats"} subTitle={"Manage"} />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default FixturesScreen;
+export default StatsScreen;

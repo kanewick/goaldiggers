@@ -13,58 +13,59 @@ const PlayersScreen = () => {
   return (
     <SafeAreaView className="bg-primary flex-1">
       <Header subTitle="Manage" screenTitle="Players" />
+      <View className="flex-1">
+        {/* Toggle for Players List */}
+        <TouchableOpacity
+          onPress={() => {
+            setShowPlayers(!showPlayers);
+            setShowRatings(false);
+          }}
+        >
+          <View className="p-2 px-5 border-t border-gray-500 pt-4 pb-4 flex-row justify-between">
+            <Text
+              className={`text-lg font-pbold ${
+                showPlayers ? "text-secondary-100" : "text-gray-100"
+              }`}
+            >
+              Goal Diggers
+            </Text>
+            <MaterialCommunityIcons
+              name="soccer-field"
+              size={24}
+              color={showPlayers ? "#FF9001" : "#CDCDE0"}
+            />
+          </View>
+        </TouchableOpacity>
 
-      {/* Toggle for Players List */}
-      <TouchableOpacity
-        onPress={() => {
-          setShowPlayers(!showPlayers);
-          setShowRatings(false);
-        }}
-      >
-        <View className="p-2 px-5 border-t border-gray-500 pt-4 pb-4 flex-row justify-between">
-          <Text
-            className={`text-lg font-pbold ${
-              showPlayers ? "text-secondary-100" : "text-gray-100"
-            }`}
-          >
-            Goal Diggers
-          </Text>
-          <MaterialCommunityIcons
-            name="soccer-field"
-            size={24}
-            color={showPlayers ? "#FF9001" : "#CDCDE0"}
-          />
-        </View>
-      </TouchableOpacity>
+        {/* Players List */}
+        {showPlayers && <PlayersTable />}
 
-      {/* Players List */}
-      {showPlayers && <PlayersTable />}
+        {/* Toggle for Ratings List */}
+        <TouchableOpacity
+          onPress={() => {
+            setShowRatings(!showRatings);
+            setShowPlayers(false);
+          }}
+        >
+          <View className="p-2 px-5 border-t border-gray-500 pt-4 pb-4 flex-row justify-between">
+            <Text
+              className={`text-lg font-pbold ${
+                showRatings ? "text-secondary-100" : "text-gray-100"
+              }`}
+            >
+              Ratings
+            </Text>
+            <MaterialIcons
+              name="quiz"
+              size={24}
+              color={showRatings ? "#FF9001" : "#CDCDE0"}
+            />
+          </View>
+        </TouchableOpacity>
 
-      {/* Toggle for Ratings List */}
-      <TouchableOpacity
-        onPress={() => {
-          setShowRatings(!showRatings);
-          setShowPlayers(false);
-        }}
-      >
-        <View className="p-2 px-5 border-t border-gray-500 pt-4 pb-4 flex-row justify-between">
-          <Text
-            className={`text-lg font-pbold ${
-              showRatings ? "text-secondary-100" : "text-gray-100"
-            }`}
-          >
-            Ratings
-          </Text>
-          <MaterialIcons
-            name="quiz"
-            size={24}
-            color={showRatings ? "#FF9001" : "#CDCDE0"}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {/* Ratings List */}
-      {showRatings && <RatingsTable />}
+        {/* Ratings List */}
+        {showRatings && <RatingsTable />}
+      </View>
     </SafeAreaView>
   );
 };
